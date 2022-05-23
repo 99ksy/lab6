@@ -1,0 +1,41 @@
+# здесь описаны инструкции по удал>нной сборке программы
+# они выполнятся на серверах гитхаба при загрузке в репозиторий
+
+name: CMake
+# имя процесса
+
+on:
+ push:
+  branches: [main]
+ pull_request:
+  branches: [main]
+# когда он выполняется - после push и pull-request в main
+
+jobs:
+ build_Linux:
+
+  runs-on: ubuntu-latest
+  # использует последнюю версию убунту
+
+  steps:
+  # шаги
+  - uses: actions/checkout@v3
+  # необходимо, чтобы процесс запускался на Github Actions
+  
+  - name: Configure Solver
+    run: cmake ${{github.workspace}}/solver_application/ -B ${{github.workspace}}/solver_application/build
+    # Подготовка файлов для сборки
+    # Те же команды, что и при самостоятельной сборке
+
+  - name: Build Solver
+    run: cmake --build ${{github.workspace}}/solver_application/build
+    # сборка
+
+  - name: Configure HelloWorld
+    run: cmake ${{github.workspace}}/hello_world_application/ -B ${{github.workspace}}/hello_world_application/build
+
+  - name: Build HelloWorld
+    run: cmake --build ${{github.workspace}}/hello_world_application/build
+    # то же самое с hello_world
+    
+    # эти команды просто запускаются на удалённых серверах
