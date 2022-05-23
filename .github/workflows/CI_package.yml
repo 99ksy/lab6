@@ -1,0 +1,40 @@
+name: CMake
+
+on:
+ push:
+   tags:
+     - v**
+# этот процесс запускается, когда в удалённый репозиторий передаётся тег, начинающийся с v (v.1.0.4.5, например)
+
+jobs:
+
+  build_packages_Linux:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Configure Solver
+      run: cmake ${{github.workspace}} -B ${{github.workspace}}/build -D PRINT_VERSION=${GITHUB_REF_NAME#v}
+    # ${GITHUB_REF_NAME#v} - имя тега без v в начале
+
+    - name: Build Solver
+      run: cmake --build ${{github.workspace}}/build
+    # та же сборка, что и раньше
+    
+    
+    - name: Build package
+      run: cmake --build ${{github.workspace}}/build --target package
+    # собираются пакеты .deb и .rpm (установочные)
+    
+    - name: Build source package
+      run: cmake --build ${{github.workspace}}/build --target package_source
+    # собираются пакеты .tar.gz и .zip (архивы с исходным кодом)
+
+    - name: Make a release
+      uses: ncipollo/release-action@v1.10.0
+      with:
+        artifacts: "build/*.deb,build/*.rpm,build/*.tar.gz,build/*.zip"
+        token: ${{ secrets.GITHUB_TOKEN }}
+    # найденной в интернете утилите передаются собранные пакеты и токен репозитория, она создаёт релиз, в который загружает эти пакеты
