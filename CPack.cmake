@@ -29,9 +29,10 @@ set(CPACK_GENERATOR "DEB;RPM")
 # ещё переменные с информацией о пакете, но отдельно для каждого формата
 set(CPACK_DEBIAN_PACKAGE_VERSION ${PRINT_VERSION})
 set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "all")
-set(CPACK_DEBIAN_PACKAGE_DESCRIPTION "Solves quadratic equations, yo")
+set(CPACK_DEBIAN_PACKAGE_DESCRIPTION "Solves quadratic equations")
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "99ksy")
 
-set(CPACK_RPM_PACKAGE_SUMMARY "Solves quadratic equations, yo")
+set(CPACK_RPM_PACKAGE_SUMMARY "Solves quadratic equations")
 
 # используем утилиту СPack
 include(CPack)
